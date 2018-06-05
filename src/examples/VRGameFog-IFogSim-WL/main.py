@@ -1,6 +1,6 @@
 """
 
-    This example is an implementation of "VRGameFog.java [#f1]_  of EGG_GAME a latency-sensitive online game" presented in [#f2]_ (first case study).
+    This example is an implementation of "VRGameFog.java [#f1]_  of EEG_GAME a latency-sensitive online game" presented in [#f2]_ (first case study).
 
     .. [#f1] https://github.com/wolfbrother/iFogSim/blob/master/src/org/fog/examples/VRGameFog.java
     .. [#f2] Gupta, H., Vahid Dastjerdi, A., Ghosh, S. K., & Buyya, R. (2017). iFogSim: A toolkit for modeling and simulation of resource management techniques in the Internet of Things, Edge and Fog computing environments. Software: Practice and Experience, 47(9), 1275-1296.
@@ -30,9 +30,9 @@ RANDOM_SEED = 1
 
 def create_application():
     # APLICATION
-    a = Application(name="EGG_GAME")
+    a = Application(name="EEG_GAME")
 
-    a.set_modules([{"EGG":{"Type":Application.TYPE_SOURCE}},
+    a.set_modules([{"EEG":{"Type":Application.TYPE_SOURCE}},
                    {"Display": {"Type": Application.TYPE_SINK}},
                    {"Client": {"RAM": 10, "Type": Application.TYPE_MODULE}},
                    {"Calculator": {"RAM": 10, "Type": Application.TYPE_MODULE}},
@@ -41,7 +41,7 @@ def create_application():
     """
     Messages among MODULES (AppEdge in iFogSim)
     """
-    m_egg = Message("M.EGG", "EGG", "Client", instructions=2000*10^6, bytes=500)
+    m_eeg = Message("M.EEG", "EEG", "Client", instructions=2000*10^6, bytes=500)
     m_sensor = Message("M.Sensor", "Client", "Calculator", instructions=3500*10^6, bytes=500)
     m_player_game_state = Message("M.Player_Game_State", "Calculator", "Coordinator", instructions=1000*10^6, bytes=1000)
     m_concentration = Message("M.Concentration", "Calculator", "Client", instructions=14*10^6, bytes=500)           # This message is sent to all client modules
@@ -52,7 +52,7 @@ def create_application():
     """
     Defining which messages will be dynamically generated # the generation is controlled by Population algorithm
     """
-    a.add_source_messages(m_egg)
+    a.add_source_messages(m_eeg)
 
     """
     MODULES/SERVICES: Definition of Generators and Consumers (AppEdges and TupleMappings in iFogSim)
@@ -63,7 +63,7 @@ def create_application():
     a.add_service_source("Calculator", dDistribution, m_player_game_state) #According with the comments on VRGameFog.java, the period is 100ms
     a.add_service_source("Coordinator", dDistribution, m_global_game_state)
     # # MODULE SERVICES
-    a.add_service_module("Client", m_egg, m_sensor, fractional_selectivity, threshold=0.9)
+    a.add_service_module("Client", m_eeg, m_sensor, fractional_selectivity, threshold=0.9)
     a.add_service_module("Client", m_concentration, m_self_state_update, fractional_selectivity, threshold=1.0)
     a.add_service_module("Client", m_global_game_state, m_global_state_update, fractional_selectivity, threshold=1.0)
     a.add_service_module("Calculator", m_sensor, m_concentration, fractional_selectivity, threshold=1.0)
@@ -188,7 +188,7 @@ def main(simulated_time,depth,police):
 
     #In addition, a source includes a distribution function:
     dDistribution = deterministicDistribution(name="Deterministic", time=100)
-    pop.set_src_control({"model": "s", "number":1,"message": app.get_message("M.EGG"), "distribution": dDistribution})
+    pop.set_src_control({"model": "s", "number":1,"message": app.get_message("M.EEG"), "distribution": dDistribution})
 
     """--
     SELECTOR algorithm
